@@ -13,17 +13,24 @@ Note : These steps have already been performed in the visual studio project incl
   - The `include` and `lib` folders and keep them in a new folder called `[your-curl-dir]` (it is named `curl-8.4.0_3-win64-mingw` in this repo's case)
   - The `bin/libcurl-x64.dll` file inside and keep it in your project directory.
 - Download [CA certificate extracted from Mozilla](https://curl.se/docs/caextract.html) `cacert.pem` and place it inside your project directory.
-- Add your-curl-dir/include to Configuration Properties -> VC++ Directories -> Include Directories.
-- Add your-curl-dir/lib to Configuration Properties -> VC++ Directories -> Library Directories.
+- Add {your-curl-dir}/include to Configuration Properties -> VC++ Directories -> Include Directories.
+- Add {your-curl-dir}/lib to Configuration Properties -> VC++ Directories -> Library Directories.
 - In Configuration Properties -> Linker -> Input -> Additional Dependencies, add these followings lines:
-  - your-curl-dir/lib/libcurl_a.lib
-  - Ws2_32.lib
-  - Wldap32.lib
-  - Crypt32.lib
-  - Normaliz.lib
+
+```plaintext
+{your-curl-dir}/lib/libcurl_a.lib
+Ws2_32.lib
+Wldap32.lib
+Crypt32.lib
+Normaliz.lib
+```
+
 - In Configuration Properties -> Build Events -> Post-Build Event -> Command Line add the following lines to copy necessary files when the .exe is generated:
-  - copy "libcurl-x64.dll" "\$(SolutionDir)$(Platform)\$(Configuration)\libcurl-x64.dll"
-  - copy "cacert.pem" "\$(SolutionDir)$(Platform)\$(Configuration)\cacert.pem"
+
+```plaintext
+copy "libcurl-x64.dll" "$(SolutionDir)$(Platform)\$(Configuration)\libcurl-x64.dll"
+copy "cacert.pem" "$(SolutionDir)$(Platform)\$(Configuration)\cacert.pem"
+```
 
 ### Project Settings for Nlohmann Json
 
@@ -40,7 +47,7 @@ using json = nlohmann::json;
 
 This is what the directory structure should look like after setting up
 
-```bash
+```plaintext
 .
 ├── curl-8.4.0_3-win64-mingw/
 │   ├── include/
