@@ -1,6 +1,6 @@
 # Secure [LibCurl](https://curl.se) Wrapper in C++ for HTTP(S) API Calls with [Nlohmann Json](https://github.com/nlohmann/json) Support
 
-This project uses 2 simple files with `SecureLibCurlJson.h` containing the definitions and `SecureLibCurlJson.cpp` containing all the implementaions.
+This project uses 2 simple files to create the wrapper with `SecureLibCurlJson.h` containing the definitions and `SecureLibCurlJson.cpp` containing all the implementaions.
 
 ## Windows (Visual Studio 2022)
 
@@ -12,6 +12,7 @@ Note : These steps have already been performed in the included visual studio .sl
 - Extract:
   - The `include` and `lib` folders and keep them in a new folder called `[your-curl-dir]` (it is named `curl-8.4.0_3-win64-mingw` in this repo's case)
   - The `bin/libcurl-x64.dll` file inside and keep it in your project directory.
+- Download [CA certificate extracted from Mozilla](https://curl.se/docs/caextract.html) `cacert.pem` and place it inside your project directory.
 - Add your-curl-dir/include to Configuration Properties -> VC++ Directories -> Include Directories.
 - Add your-curl-dir/lib to Configuration Properties -> VC++ Directories -> Library Directories.
 - In Configuration Properties -> Linker -> Input -> Additional Dependencies, add these followings lines:
@@ -21,6 +22,9 @@ Note : These steps have already been performed in the included visual studio .sl
   - Crypt32.lib
   - Normaliz.lib
 - The project should now have full libcurl support
+- In Configuration Properties -> Build Events -> Post-Build Event -> Command Line add the following lines to copy necessary files when the .exe is generated:
+  - copy "libcurl-x64.dll" "\$(SolutionDir)$(Platform)\$(Configuration)\libcurl-x64.dll"
+  - copy "cacert.pem" "\$(SolutionDir)$(Platform)\$(Configuration)\cacert.pem"
 
 ### Project Settings for Nlohmann Json
 
@@ -31,6 +35,26 @@ Note : These steps have already been performed in the included visual studio .sl
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
+```
+
+### Directory Structure
+
+This is what the directory structure should look like after setting up
+
+```bash
+.
+├── curl-8.4.0_3-win64-mingw/
+│   ├── include/
+│   │   └── [all the files inside include as-is]
+│   └── lib/
+│       └── [all the files lib include as-is]
+├── nlohmann/
+│   └── json.hpp
+├── cacert.pem
+├── libcurl-x64.dll
+├── SecureLibCurlJson.h
+├── SecureLibCurlJson.cpp
+└── Source.cpp
 ```
 
 ### Usage

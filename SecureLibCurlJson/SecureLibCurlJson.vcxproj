@@ -114,6 +114,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>curl-8.4.0_3-win64-mingw/lib/libcurl.dll.a;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "libcurl-x64.dll" "$(SolutionDir)$(Platform)\$(Configuration)\libcurl-x64.dll"
+copy "cacert.pem" "$(SolutionDir)$(Platform)\$(Configuration)\cacert.pem"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
