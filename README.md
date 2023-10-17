@@ -6,7 +6,7 @@ This project uses 2 simple files to create the wrapper with `SecureLibCurlJson.h
 
 ### Project Settings for Libcurl
 
-Note : These steps have already been performed in the included visual studio project included in this repo, but, they are documented if you need to setup a new project.
+Note : These steps have already been performed in the visual studio project included in this repo, but, they are documented if you need to setup a new project.
 
 - Download [Curl for Windows](https://curl.se/windows/)
 - Extract:
