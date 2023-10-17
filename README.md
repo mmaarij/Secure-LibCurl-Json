@@ -1,4 +1,4 @@
-# Secure [LibCurl](https://curl.se) Implementation in C++ with [Nlohmann Json](https://github.com/nlohmann/json) Support
+# Secure [LibCurl](https://curl.se) Wrapper in C++ with [Nlohmann Json](https://github.com/nlohmann/json) Support
 
 This project uses 2 simple files with `SecureLibCurlJson.h` containing the definitions and `SecureLibCurlJson.cpp` containing all the implementaions.
 
@@ -70,6 +70,4 @@ else
 {
 	std::cerr << "API request failed." << std::endl;
 }
-
-return 0;
 ```
