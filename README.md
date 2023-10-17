@@ -21,7 +21,6 @@ Note : These steps have already been performed in the included visual studio .sl
   - Wldap32.lib
   - Crypt32.lib
   - Normaliz.lib
-- The project should now have full libcurl support
 - In Configuration Properties -> Build Events -> Post-Build Event -> Command Line add the following lines to copy necessary files when the .exe is generated:
   - copy "libcurl-x64.dll" "\$(SolutionDir)$(Platform)\$(Configuration)\libcurl-x64.dll"
   - copy "cacert.pem" "\$(SolutionDir)$(Platform)\$(Configuration)\cacert.pem"
