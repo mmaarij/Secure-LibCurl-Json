@@ -6,13 +6,17 @@ using json = nlohmann::json;
 
 // *********************************** PUBLIC METHODS ***********************************
 
-SecureLibCurlJson::SecureLibCurlJson()
+SecureLibCurlJson::SecureLibCurlJson(const bool _secure)
 {
+    this->secure = _secure;
     curl = curl_easy_init();
     if (!curl)
         std::cerr << "Failed to initialize libcurl." << std::endl;
-    if (this->DownloadUpdatedCert() != 0)
-        std::cerr << "Failed to download or update certificate" << std::endl;
+    if (this->secure)
+    {
+        if (this->DownloadUpdatedCert() != 0)
+            std::cerr << "Failed to download or update certificate" << std::endl;
+    }
 }
 
 SecureLibCurlJson::~SecureLibCurlJson()
@@ -104,9 +108,12 @@ json SecureLibCurlJson::MakeApiRequest(const std::string& url, const std::string
     struct curl_slist* headers = NULL;
     headers = curl_slist_append(headers, "Content-Type: application/json");
 
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 2);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2);
-    curl_easy_setopt(curl, CURLOPT_CAINFO, "cacert.pem");
+    if (this->secure)
+    {
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 2);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "cacert.pem");
+    }
 
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
