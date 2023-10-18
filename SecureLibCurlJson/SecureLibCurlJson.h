@@ -4,6 +4,7 @@
 #include <string>
 #include "nlohmann/json.hpp"
 #include <map>
+#include <fstream>
 
 using json = nlohmann::json;
 
@@ -19,8 +20,9 @@ public:
      * If _secure = true then an updated certificate file is automatically downloaded and all future HTTP/HTTPS requests use this certificate.
      * If _secure = false then the updated certificate file will not be downloaded and only HTTP requests will be able to complete with this object.
      * 
+     * @param _logging A boolean flag indicating whether to turn logging on.
      */
-    SecureLibCurlJson(const bool _secure);
+    SecureLibCurlJson(const bool _secure, const bool _logging);
 
     /**
      * @brief Destructor for the SecureLibCurlJson class.
@@ -54,9 +56,33 @@ public:
         const std::map<std::string, std::string>& queryParameters,
         const json& bodyParameters);
 
+    /**
+     * @brief Starts logging for API requests and responses.
+     *
+     * This method enables logging of API request and response details for debugging and auditing purposes.
+     * The log files are stored in a "logs" directory, and each log file is named with a timestamp.
+     */
+    void StartLogging();
+
 private:
     CURL* curl; // A pointer to the libcurl handle.
     bool secure; // A flag indicating whether to use secure mode
+    bool logging;        // Flag to indicate whether logging is enabled
+    std::ofstream logFile;  // Log file stream
+
+    /**
+     * @brief Logs a message to the log file.
+     *
+     * @param message The message to be logged.
+     */
+    void LogMessage(const std::string& message);
+
+    /**
+     * @brief Gets the current timestamp as a string.
+     *
+     * @return The current timestamp as a string.
+     */
+    std::string GetCurrentTimestamp();
 
     /**
      * @brief Static callback function to write response data to a string.
