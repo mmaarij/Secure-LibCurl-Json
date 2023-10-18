@@ -2,7 +2,20 @@
 
 This project uses 2 simple files to create the wrapper with `SecureLibCurlJson.h` containing the definitions and `SecureLibCurlJson.cpp` containing all the implementaions.
 
+This repository has 2 branches:
+
+1. [Windows](https://github.com/mmaarij/Secure-LibCurl-Json/tree/windows)
+2. [Linux](https://github.com/mmaarij/Secure-LibCurl-Json/tree/linux)
+
+## Table of Contents
+
+- [Windows (Visual Studio 2022)](#windows-visual-studio-2022)
+- [Linux (Tested on Ubuntu 22.04 LTS)](#linux-tested-on-ubuntu-2204-lts)
+- [Usage](#usage)
+
 ## Windows (Visual Studio 2022)
+
+The entire Visual Studio 2022 Project is contained in the [Windows Branch](https://github.com/mmaarij/Secure-LibCurl-Json/tree/windows)
 
 ### Project Settings for Libcurl
 
@@ -63,7 +76,51 @@ This is what the directory structure should look like after setting up
 └── Source.cpp
 ```
 
-### Usage
+---
+
+## Linux (Tested on Ubuntu 22.04 LTS)
+
+The Linux code is contained in the [Linux Branch](https://github.com/mmaarij/Secure-LibCurl-Json/tree/linux)
+
+### Directory Structure
+
+This is what the directory structure should look like
+
+```plaintext
+.
+├── nlohmann/
+│   └── json.hpp
+├── cacert.pem
+├── SecureLibCurlJson.h
+├── SecureLibCurlJson.cpp
+└── Source.cpp
+```
+
+### Install Libcurl
+
+Run the following commands in the terminal
+
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install libcurl4-openssl-dev
+```
+
+### Compile
+
+```bash
+g++ -o SLCJ.out Source.cpp SecureLibCurlJson.cpp -lcurl
+```
+
+### Run the program
+
+```bash
+./SLCJ.out
+```
+
+---
+
+## Usage
 
 Example usage is provided in `Source.cpp`
 
@@ -101,3 +158,5 @@ Example usage is provided in `Source.cpp`
       std::cerr << "API request failed." << std::endl;
   }
 ```
+
+---
