@@ -53,7 +53,7 @@ This is what the directory structure should look like after setting up
 │   ├── include/
 │   │   └── [all the files inside include as-is]
 │   └── lib/
-│       └── [all the files lib include as-is]
+│       └── [all the files inside lib as-is]
 ├── nlohmann/
 │   └── json.hpp
 ├── cacert.pem
