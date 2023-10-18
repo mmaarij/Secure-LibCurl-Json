@@ -3,7 +3,7 @@
 
 int main()
 {
-    SecureLibCurlJson curlLib(true);
+    SecureLibCurlJson curlLib(false);
 
     std::string apiUrl = "https://api.publicapis.org/entries";
     std::string requestType = "GET";

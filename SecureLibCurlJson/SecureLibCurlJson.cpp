@@ -32,6 +32,11 @@ int SecureLibCurlJson::DownloadUpdatedCert()
         return 1;
     }
 
+    if (!secure) {
+        std::cerr << "Object was constructed using _secure as false. Certificates cannot be updated." << std::endl;
+        return 1;
+    }
+
     CURLcode res;
 
     // Set the URL to the remote file
