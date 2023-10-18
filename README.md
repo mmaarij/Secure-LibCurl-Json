@@ -7,11 +7,13 @@ This repository has 2 branches:
 1. [Windows](https://github.com/mmaarij/Secure-LibCurl-Json/tree/windows)
 2. [Linux](https://github.com/mmaarij/Secure-LibCurl-Json/tree/linux)
 
-## Table of Contents
+### Table of Contents
 
 - [Windows (Visual Studio 2022)](#windows-visual-studio-2022)
 - [Linux (Tested on Ubuntu 22.04 LTS)](#linux-tested-on-ubuntu-2204-lts)
 - [Usage](#usage)
+
+---
 
 ## Windows (Visual Studio 2022)
 
