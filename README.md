@@ -84,21 +84,7 @@ This is what the directory structure should look like after setting up
 
 The Linux code is contained in the [Linux Branch](https://github.com/mmaarij/Secure-LibCurl-Json/tree/linux)
 
-### Directory Structure
-
-This is what the directory structure should look like
-
-```plaintext
-.
-├── nlohmann/
-│   └── json.hpp
-├── cacert.pem
-├── SecureLibCurlJson.h
-├── SecureLibCurlJson.cpp
-└── Source.cpp
-```
-
-### Install Libcurl
+### Install Prerequisites (Libcurl and Nlohmann JSON)
 
 Run the following commands in the terminal
 
@@ -106,6 +92,28 @@ Run the following commands in the terminal
 sudo apt update
 sudo apt upgrade
 sudo apt install libcurl4-openssl-dev
+sudo apt install nlohmann-json3-dev
+```
+
+### Download the updated [CA certificate extracted from Mozilla](https://curl.se/docs/caextract.html)
+
+Run the following command in the terminal from inside the directory with the source code
+
+```bash
+curl --etag-compare etag.txt --etag-save etag.txt --remote-name https://curl.se/ca/cacert.pem
+```
+
+### Directory Structure
+
+This is what the directory structure should look like
+
+```plaintext
+.
+├── cacert.pem
+├── etag.txt
+├── SecureLibCurlJson.h
+├── SecureLibCurlJson.cpp
+└── Source.cpp
 ```
 
 ### Compile
