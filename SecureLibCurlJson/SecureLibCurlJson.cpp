@@ -1,21 +1,29 @@
 #include "SecureLibCurlJson.h"
 #include <iostream>
-#include <fstream>
+#include <ctime>
+#include <sstream>
+#include <filesystem>
+
 
 using json = nlohmann::json;
 
 // *********************************** PUBLIC METHODS ***********************************
 
-SecureLibCurlJson::SecureLibCurlJson(const bool _secure)
+SecureLibCurlJson::SecureLibCurlJson(const bool _secure, const bool _logging)
 {
     this->secure = _secure;
     curl = curl_easy_init();
     if (!curl)
         std::cerr << "Failed to initialize libcurl." << std::endl;
-    if (this->secure)
+    if (_secure)
     {
         if (this->DownloadUpdatedCert() != 0)
             std::cerr << "Failed to download or update certificate" << std::endl;
+    }
+
+    if (_logging)
+    {
+        this->StartLogging();
     }
 }
 
@@ -23,6 +31,10 @@ SecureLibCurlJson::~SecureLibCurlJson()
 {
     if (curl)
         curl_easy_cleanup(curl);
+
+    if (logging) {
+        logFile.close();
+    }
 }
 
 int SecureLibCurlJson::DownloadUpdatedCert()
@@ -130,7 +142,13 @@ json SecureLibCurlJson::MakeApiRequest(const std::string& url, const std::string
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     // Pass the response string as userdata
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+    // Make the request
     res = curl_easy_perform(curl);
+
+    // Log the API request
+    std::string requestLog = "API Request: " + requestType + " " + url;
+    LogMessage(requestLog);
 
     // Clean up headers
     curl_slist_free_all(headers);
@@ -138,6 +156,10 @@ json SecureLibCurlJson::MakeApiRequest(const std::string& url, const std::string
     if (res != CURLE_OK) 
     {
         fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+
+        // Log the Error
+        std::string responseLog = "API Request Error: " + std::string(curl_easy_strerror(res)) + "\n";
+        LogMessage(responseLog);
     }
     else
     {
@@ -145,9 +167,15 @@ json SecureLibCurlJson::MakeApiRequest(const std::string& url, const std::string
         json data;
         try {
             data = json::parse(response);
+            // Log the API response
+            std::string responseLog = "API Response: " + response + "\n";
+            LogMessage(responseLog);
         }
         catch (const json::parse_error& e) {
             std::cerr << "JSON parsing error: " << e.what() << std::endl;
+            // Log the Error
+            std::string responseLog = "JSON Parse Error: " + std::string(e.what()) + "\n";
+            LogMessage(responseLog);
         }
         return data;
     }
@@ -155,7 +183,48 @@ json SecureLibCurlJson::MakeApiRequest(const std::string& url, const std::string
     return json();
 }
 
+
+void SecureLibCurlJson::StartLogging() {
+    if (!logging) {
+        // Specify the directory path for the "logs" folder
+        std::string logDirectory = "logs/";
+        std::string logFileName = logDirectory + GetCurrentTimestamp() + ".log";
+
+        // Create the "logs" directory if it doesn't exist
+        std::filesystem::create_directories(logDirectory);
+
+        // Open the log file with the complete path
+        logFile.open(logFileName, std::ios::out);
+
+        logging = true;
+        std::cout << "Logging Started." << std::endl;
+        LogMessage("Logging started. Date|Time Format: DD-MM-YY-HH-MM-SS\n");
+    }
+}
+
 // *********************************** PRIVATE STATIC METHODS ***********************************
+
+void SecureLibCurlJson::LogMessage(const std::string& message) {
+    if (logging) {
+        logFile << GetCurrentTimestamp() << " " << message << std::endl;
+    }
+}
+
+std::string SecureLibCurlJson::GetCurrentTimestamp() {
+    std::time_t now = std::time(nullptr);
+    struct std::tm timeInfo;
+    localtime_s(&timeInfo, &now);
+
+    std::ostringstream oss;
+    oss << timeInfo.tm_mday << '-';
+    oss << (timeInfo.tm_mon + 1) << '-';
+    oss << (timeInfo.tm_year + 1900) << '-';
+    oss << timeInfo.tm_hour << '-';
+    oss << timeInfo.tm_min << '-';
+    oss << timeInfo.tm_sec;
+
+    return oss.str();
+}
 
 size_t SecureLibCurlJson::WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
     size_t totalSize = size * nmemb;
